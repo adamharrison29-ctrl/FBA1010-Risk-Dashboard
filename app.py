@@ -297,15 +297,33 @@ with tab2:
     st.markdown("### Advanced Correlation Analysis")
     
     corr_matrix = returns_full[['LMT', 'CL=F', 'TLT']].corr()
+    
+    # Custom dark-theme color scale (replaces the white/pink)
+    custom_colorscale = [
+        [0.0, '#002060'],   # Deep blue for negative correlation
+        [0.5, '#2d3342'],   # Dark slate for near-zero correlation
+        [1.0, '#00d4ff']    # Electric cyan for positive correlation
+    ]
+
     fig_corr = go.Figure(data=go.Heatmap(
                    z=corr_matrix.values,
                    x=corr_matrix.columns,
                    y=corr_matrix.columns,
-                   colorscale='RdBu', zmin=-1, zmax=1,
+                   colorscale=custom_colorscale, zmin=-1, zmax=1,
                    text=np.round(corr_matrix.values, 2),
                    texttemplate="%{text}", textfont={"size":18, "color":"white"},
-                   showscale=True))
-    fig_corr.update_layout(title="Asset Correlation Matrix", template="plotly_dark", width=500, height=500, yaxis_autorange='reversed')
+                   showscale=True,
+                   xgap=3, ygap=3)) # This adds the clean borders between cells
+                   
+    fig_corr.update_layout(
+        title="Asset Correlation Matrix", 
+        template="plotly_dark", 
+        width=500, 
+        height=500, 
+        yaxis_autorange='reversed',
+        plot_bgcolor='rgba(0,0,0,0)',
+        paper_bgcolor='rgba(0,0,0,0)'
+    )
     
     colA, colB = st.columns([1, 1])
     with colA:
@@ -424,6 +442,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

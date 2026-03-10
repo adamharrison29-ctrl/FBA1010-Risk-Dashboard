@@ -95,6 +95,16 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Module:** FBA1010")
     st.markdown("**Date:** March 2026")
+    st.markdown("---")
+    st.markdown("**Data Export:**")
+    # Convert dataframe to CSV for the download button
+    csv_export = returns_full.to_csv().encode('utf-8')
+    st.download_button(
+        label="📥 Download Cleaned Returns (CSV)",
+        data=csv_export,
+        file_name='fba1010_cleaned_returns.csv',
+        mime='text/csv',
+    )
 
 # ==========================================
 # 3. HERO BANNER
@@ -415,6 +425,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

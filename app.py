@@ -80,14 +80,24 @@ st.markdown("""
     """, unsafe_allow_html=True)
 
 # ==========================================
-# 2. THE SIDEBAR (Framing the page)
+# 2. DATA ENGINE (Moved up so the sidebar can see it!)
+# ==========================================
+@st.cache_data
+def load_market_data():
+    tickers = ['LMT', 'CL=F', 'TLT']
+    prices = yf.download(tickers, start='2024-03-05', end='2026-03-06', auto_adjust=True)['Close']
+    returns = prices.pct_change().dropna()
+    return prices, returns
+
+prices, returns_full = load_market_data()
+
+# ==========================================
+# 3. THE SIDEBAR (Framing the page)
 # ==========================================
 with st.sidebar:
-    # This will load the image directly from your GitHub folder!
     try:
-        st.image("dcu_logo.jpg", use_container_width=True)
+        st.image("dcu_logo.png", use_container_width=True)
     except FileNotFoundError:
-        # A quick backup text header just in case the file name is slightly off
         st.markdown("<h2 style='text-align: center; color: #00d4ff;'>DCU Business School</h2>", unsafe_allow_html=True)
         
     st.header("⚙️ Dashboard Controls")
@@ -95,9 +105,10 @@ with st.sidebar:
     st.markdown("---")
     st.markdown("**Module:** FBA1010")
     st.markdown("**Date:** March 2026")
+    
+    # The Download Button
     st.markdown("---")
     st.markdown("**Data Export:**")
-    # Convert dataframe to CSV for the download button
     csv_export = returns_full.to_csv().encode('utf-8')
     st.download_button(
         label="📥 Download Cleaned Returns (CSV)",
@@ -107,7 +118,7 @@ with st.sidebar:
     )
 
 # ==========================================
-# 3. HERO BANNER
+# 4. HERO BANNER
 # ==========================================
 st.markdown("""
     <div style="
@@ -137,18 +148,6 @@ st.markdown("""
         </p>
     </div>
     """, unsafe_allow_html=True)
-
-# ==========================================
-# 4. DATA ENGINE
-# ==========================================
-@st.cache_data
-def load_market_data():
-    tickers = ['LMT', 'CL=F', 'TLT']
-    prices = yf.download(tickers, start='2024-03-05', end='2026-03-06', auto_adjust=True)['Close']
-    returns = prices.pct_change().dropna()
-    return prices, returns
-
-prices, returns_full = load_market_data()
 
 # ==========================================
 # 5. TABS
@@ -425,6 +424,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

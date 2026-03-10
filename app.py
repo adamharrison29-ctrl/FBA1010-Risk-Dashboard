@@ -27,20 +27,24 @@ prices, returns_full = load_market_data()
 # 3. TABS
 tab1, tab2, tab3 = st.tabs(["📊 Q1: Individual Asset Risk", "💼 Q2: Portfolio Diversification", "🛢️ Q3: Jet Fuel Hedging"])
 
+# ==========================================
 # --- TAB 1: Q1 ---
+# ==========================================
 with tab1:
-    st.header("Individual Asset Risk Profiles")
     st.markdown("""
     ### Methodology
-    Daily price data for LMT, CL=F, and TLT were sourced via Yahoo Finance (March 2024–March 2026) to obtain accurate, public daily histories. CL=F serves as a continuous, liquid proxy for near-term oil exposure. Daily logarithmic returns were calculated to evaluate their risk profiles.
+    Daily price data for three assets, Lockheed Martin (LMT) representing equity, Continuous Front-Month WTI Crude Oil (CL=F) representing unexpired crude oil futures, and the iShares 20+ Year Treasury Bond ETF (TLT), were sourced via Yahoo Finance from March 2024 to March 2026. [cite: 2] CL=F was selected as it provides a continuous, liquid proxy for near-term oil exposure, solving the issue of individual unexpired contracts lacking two full years of historical data. [cite: 3] Daily logarithmic returns were calculated to evaluate the risk profile of each asset. [cite: 4]
     
     ### Q1A: Normality of Returns
-    A Shapiro-Wilk test indicates the returns are not normally distributed (all p-values < 0.05). Standard normal distributions assume extreme events are exceptionally rare. In reality, these assets exhibit "fat tails" (excess kurtosis) due to fundamental drivers:
-    * **LMT (Kurtosis 9.66):** Sensitive to extreme, binary events like government contract awards.
-    * **CL=F (Kurtosis 1.88):** Vulnerable to sudden macroeconomic supply shocks.
-    * **TLT (Kurtosis 0.90):** Reacts sharply to surprise central bank interest rate decisions.
+    A Shapiro-Wilk test was conducted to determine if the full 2-year sample returns follow a normal distribution. [cite: 6] All p-values are significantly below 0.05; thus, we reject the null hypothesis. The returns are not normally distributed. [cite: 9] 
+    
+    Standard normal distributions assume extreme events are exceptionally rare. In reality, these assets exhibit "fat tails" (excess kurtosis) due to real-world fundamental drivers: [cite: 10]
+    * **LMT (Excess Kurtosis: 9.66):** Highly sensitive to extreme, binary events like government contract awards or sudden geopolitical conflicts. [cite: 11]
+    * **CL=F (Excess Kurtosis: 1.88):** Vulnerable to immediate macroeconomic supply shocks, such as unexpected OPEC+ cuts. [cite: 12]
+    * **TLT (Excess Kurtosis: 0.90):** Reacts sharply to surprise central bank interest rate decisions. [cite: 13]
     """)
-    asset_choice = st.selectbox("Select Asset to Analyze:", ['LMT', 'CL=F', 'TLT'])
+    
+    asset_choice = st.selectbox("Select Asset to View Interactive Distribution:", ['LMT', 'CL=F', 'TLT'])
     data = returns_full[asset_choice].dropna()
     
     c1, c2, c3, c4 = st.columns(4)
@@ -57,12 +61,29 @@ with tab1:
     fig1 = go.Figure()
     fig1.add_trace(go.Bar(x=bin_centers, y=counts, name="Actual Return Density", marker_color='#00d4ff', opacity=0.7))
     fig1.add_trace(go.Scatter(x=x_curve, y=y_curve, mode='lines', name="Normal Distribution", line=dict(color='#ff4b4b', width=3)))
-    fig1.update_layout(title=f"{asset_choice} Return Distribution", template="plotly_dark", hovermode="x unified", barmode='overlay')
+    fig1.update_layout(title=f"{asset_choice} Return Distribution vs Normal Curve", template="plotly_dark", hovermode="x unified", barmode='overlay')
     st.plotly_chart(fig1, use_container_width=True)
 
+    st.markdown("""
+    ### Q1B & Q1C: Historical Risk Metrics (Year 1 vs. Full 2 Years)
+    In Year 1, TLT was the least volatile, while CL=F was the most volatile. [cite: 18] LMT exhibited the most severe tail risk (ES: -6.35%). [cite: 19] Comparing the full two years to Year 1, volatility noticeably increased for LMT and CL=F. Furthermore, tail risk worsened significantly; [cite: 20] LMT’s 1% VaR dropped from -3.55% to -4.82%, indicating the second year introduced more extreme negative downside events, reinforcing the presence of fat tails. [cite: 21]
+    
+    ### Q1D: Parametric Risk Metrics
+    Compared to the historical metrics in Q1C, the parametric method drastically underestimates tail risk. [cite: 25] For example, LMT's Parametric ES (-3.91%) is far weaker than its Historical ES (-6.95%). [cite: 26] Because parametric models force a symmetrical "bell curve," they ignore the heavy left tails identified in Q1A, creating a [cite: 27] dangerously optimistic risk assessment. [cite: 28]
+    
+    **Bridging the Gap: Modified VaR**
+    Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion. This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
+    """)
+
+# ==========================================
 # --- TAB 2: Q2 ---
+# ==========================================
 with tab2:
-    st.header("Equal-Weighted Portfolio Risk")
+    st.markdown("""
+    ### Q2: Risk Profile of Portfolio of Assets
+    An equal-weighted portfolio was constructed using the three assets (LMT, CL=F, TLT), allocating 33.33% to each. [cite: 31] Using the full 2 years of daily returns, historical simulation was applied to determine the portfolio's risk metrics. [cite: 32]
+    """)
+    
     weights = np.array([1/3, 1/3, 1/3])
     port_returns = returns_full[['LMT', 'CL=F', 'TLT']].dot(weights)
     p_var = np.percentile(port_returns, 1)
@@ -73,9 +94,48 @@ with tab2:
     pc2.metric("Portfolio 1% VaR", f"{p_var*100:.2f}%")
     pc3.metric("Portfolio 1% ES", f"{p_es*100:.2f}%", "Subadditive Property Satisfied")
 
+    st.markdown("""
+    **Summary & Comparison to Individual Assets**
+    A clear diversification benefit is observed. [cite: 34] The portfolio's overall volatility (0.87%) and tail risk (ES: -3.05%) are drastically lower than those of its riskiest components, LMT (ES: -6.95%) and CL=F (ES: -6.58%). [cite: 35] Because these distinct asset classes (equities, commodities, bonds) are not perfectly correlated, extreme downside movements in one asset are often offset by stability or inverse movements in another, smoothing the overall return distribution and dramatically reducing catastrophic tail risk. [cite: 36]
+    
+    ### Advanced Correlation Analysis
+    """)
+    
+    # Advanced Correlation Heatmap
+    corr_matrix = returns_full[['LMT', 'CL=F', 'TLT']].corr()
+    fig_corr = go.Figure(data=go.Heatmap(
+                   z=corr_matrix.values,
+                   x=corr_matrix.columns,
+                   y=corr_matrix.columns,
+                   colorscale='RdBu', zmin=-1, zmax=1,
+                   text=np.round(corr_matrix.values, 2),
+                   texttemplate="%{text}", textfont={"size":16}))
+    fig_corr.update_layout(title="Asset Correlation Matrix", template="plotly_dark", width=600, height=500)
+    
+    colA, colB = st.columns([1, 1])
+    with colA:
+        st.plotly_chart(fig_corr, use_container_width=True)
+    with colB:
+        st.markdown("""
+        <br><br>The diversification benefits observed are mathematically driven by the low and negative correlations between the constituent assets. As shown in the matrix, TLT (Treasuries) exhibits a negative correlation with both equities and commodities. During "flight-to-safety" market shocks, Treasury bonds typically appreciate, offsetting the portfolio's net losses.
+        """, unsafe_allow_html=True)
+
+    st.markdown("""
+    **The Subadditive Property**
+    Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. [cite: 37] The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. [cite: 38] ES is a mathematically coherent risk measure that always satisfies this rule. [cite: 39] Conversely, when asset returns exhibit non-normal distributions with "fat tails"—which was definitively proven in Q1—VaR can fail subadditivity. [cite: 40] This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts. [cite: 41]
+    """)
+
+# ==========================================
 # --- TAB 3: Q3 ---
+# ==========================================
 with tab3:
-    st.header("Jet Fuel Cross-Hedging Engine")
+    st.markdown("""
+    ### Q3: Futures Markets & Hedging
+    The assignment requires the use of daily price data spanning two full calendar years. [cite: 43] Working backward from the March 2026 deadline, a two-year sample from March 2024 to March 2026 was constructed. [cite: 44] Daily U.S. Gulf Coast spot jet fuel prices were sourced from the EIA. [cite: 45] Because government spot reporting naturally lags behind live financial markets, the continuous crude oil futures data (CL=F) was strategically truncated to March 2, 2026, perfectly aligning the two time series to prevent data-matching errors. [cite: 46]
+    
+    Following the assignment guidelines, the sample was split: the first 1.5 years of data were used to estimate the optimal hedge ratio ($h^*$), and the remaining data was used to test the hedge, simulating physical fuel consumption at the exact end of the 2-year sample. [cite: 47] The $h^*$ was calculated via an Ordinary Least Squares (OLS) regression of the daily price changes of jet fuel against crude oil futures. [cite: 48]
+    """)
+    
     try:
         eia = pd.read_excel('US EIA Data.xlsx', sheet_name='Data 1', skiprows=2).iloc[:, [0, 1]]
         eia.columns = ['Date', 'Jet_Fuel_Price']
@@ -100,17 +160,57 @@ with tab3:
         profit = contracts * 1000 * (df_test['Crude_Oil_Price'].iloc[-1] - df_test['Crude_Oil_Price'].iloc[0])
         eff_price = (unhedged_cost - profit) / gallons
         
+        # Regression Scatter Plot
+        fig_scatter = go.Figure()
+        fig_scatter.add_trace(go.Scatter(x=model_data['Crude_Oil_Price'], y=model_data['Jet_Fuel_Price'], mode='markers', name='Daily Changes', marker=dict(color='gray', opacity=0.6)))
+        fig_scatter.add_trace(go.Scatter(x=model_data['Crude_Oil_Price'], y=model.predict(X), mode='lines', name=f'OLS Line (Slope: {h_star:.4f})', line=dict(color='#ff4b4b', width=3)))
+        fig_scatter.update_layout(title="OLS Regression: Estimating Optimal Hedge Ratio", template="plotly_dark", xaxis_title="Crude Oil Daily Change ($/bbl)", yaxis_title="Jet Fuel Daily Change ($/gal)")
+        st.plotly_chart(fig_scatter, use_container_width=True)
+
+        st.markdown(f"""
+        **Hedge Ratio & Contract Calculation**
+        The regression yielded an $h^*$ of 0.0248 ($R^2$ = 0.5887). [cite: 50] Because the spot data is priced per gallon and the futures data is priced per barrel, this $h^*$ implicitly captures the unit variance (closely mirroring the theoretical 1:42 gallon-to-barrel ratio). [cite: 51]
+        
+        To determine the number of 1,000-barrel contracts ($N$) required to hedge the 1,000,000-gallon exposure: [cite: 52]
+        
+        $$N = \\frac{{1,000,000 \\times 0.0248}}{{1,000}} = 24.79$$
+        
+        Rounding to the nearest whole unit, the airline must take a long position of 25 crude oil contracts. [cite: 55]
+        """)
+
         hc1, hc2, hc3, hc4 = st.columns(4)
         hc1.metric("Optimal Hedge Ratio (h*)", f"{h_star:.4f}")
         hc2.metric("R-Squared", f"{model.rsquared:.4f}")
         hc3.metric("Contracts Needed", f"{contracts}")
         hc4.metric("Net Hedge Savings", f"${profit:,.0f}")
         
+        # Dual-Axis Tracking Chart
         fig3 = go.Figure()
         fig3.add_trace(go.Scatter(x=df.index, y=df['Jet_Fuel_Price'], name="Jet Fuel Spot ($/gal)", line=dict(color='#00d4ff')))
         fig3.add_trace(go.Scatter(x=df.index, y=df['Crude_Oil_Price'], name="Crude Oil Futures ($/bbl)", yaxis="y2", line=dict(color='#ff4b4b')))
         fig3.update_layout(title="Spot Jet Fuel vs. NYMEX Crude Futures", template="plotly_dark", hovermode="x unified", yaxis2=dict(overlaying="y", side="right"))
         st.plotly_chart(fig3, use_container_width=True)
-    except Exception as e:
+        
+        st.markdown("""
+        **Real-World Hedge Effectiveness**
+        To test the hedge, we simulated initiating the 25-contract long position at the end of the estimation period (Sept 5, 2025) and lifting it upon physical fuel consumption at the end of the dataset (March 2, 2026). [cite: 58]
+        
+        **Conclusion:**
+        The cross-hedge was highly effective. Rising energy prices across the test period would have severely impacted the airline's operating costs. [cite: 61] However, the $234,000 profit generated by the long futures position successfully offset the rising spot market prices, reducing the effective cost of jet fuel from $2.74 to $2.50 per gallon. [cite: 62] This validates the $R^2$ of 58.87%, proving that while CL=F is not a perfect 1:1 proxy, it serves as an excellent mitigating instrument for jet fuel price risk. [cite: 63]
+        
+        **Limitations and Basis Risk**
+        """)
 
+        # Basis Risk Chart
+        df['Basis'] = df['Jet_Fuel_Price'] - (df['Crude_Oil_Price'] / 42)
+        fig_basis = go.Figure()
+        fig_basis.add_trace(go.Scatter(x=df.index, y=df['Basis'], mode='lines', name='Basis Spread', line=dict(color='#a500ff', width=2)))
+        fig_basis.update_layout(title="Basis Risk: Price Differential Between Jet Fuel and Crude Oil", template="plotly_dark", yaxis_title="Spread ($/gal)")
+        st.plotly_chart(fig_basis, use_container_width=True)
+
+        st.markdown("""
+        While the cross-hedge generated substantial savings, it is subject to basis risk—the risk that the price relationship between jet fuel and crude oil fluctuates over time. Jet fuel prices are influenced by specific refining constraints and aviation demand, which do not always perfectly track unrefined crude oil. As visualized above, this basis spread is volatile. Therefore, while $h^*$ provides an optimal static ratio, a dynamic hedging strategy would be required in practice to manage ongoing basis risk.
+        """)
+
+    except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")

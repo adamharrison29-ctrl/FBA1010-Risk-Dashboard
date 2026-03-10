@@ -30,6 +30,16 @@ tab1, tab2, tab3 = st.tabs(["📊 Q1: Individual Asset Risk", "💼 Q2: Portfoli
 # --- TAB 1: Q1 ---
 with tab1:
     st.header("Individual Asset Risk Profiles")
+    st.markdown("""
+    ### Methodology
+    Daily price data for LMT, CL=F, and TLT were sourced via Yahoo Finance (March 2024–March 2026) to obtain accurate, public daily histories. CL=F serves as a continuous, liquid proxy for near-term oil exposure. Daily logarithmic returns were calculated to evaluate their risk profiles.
+    
+    ### Q1A: Normality of Returns
+    A Shapiro-Wilk test indicates the returns are not normally distributed (all p-values < 0.05). Standard normal distributions assume extreme events are exceptionally rare. In reality, these assets exhibit "fat tails" (excess kurtosis) due to fundamental drivers:
+    * **LMT (Kurtosis 9.66):** Sensitive to extreme, binary events like government contract awards.
+    * **CL=F (Kurtosis 1.88):** Vulnerable to sudden macroeconomic supply shocks.
+    * **TLT (Kurtosis 0.90):** Reacts sharply to surprise central bank interest rate decisions.
+    """)
     asset_choice = st.selectbox("Select Asset to Analyze:", ['LMT', 'CL=F', 'TLT'])
     data = returns_full[asset_choice].dropna()
     
@@ -102,4 +112,5 @@ with tab3:
         fig3.update_layout(title="Spot Jet Fuel vs. NYMEX Crude Futures", template="plotly_dark", hovermode="x unified", yaxis2=dict(overlaying="y", side="right"))
         st.plotly_chart(fig3, use_container_width=True)
     except Exception as e:
+
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")

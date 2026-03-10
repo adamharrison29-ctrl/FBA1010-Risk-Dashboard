@@ -83,7 +83,13 @@ st.markdown("""
 # 2. THE SIDEBAR (Framing the page)
 # ==========================================
 with st.sidebar:
-    st.image("https://upload.wikimedia.org/wikipedia/en/thumb/5/52/Dublin_City_University_logo.svg/1200px-Dublin_City_University_logo.svg.png", width=150)
+    # This will load the image directly from your GitHub folder!
+    try:
+        st.image("dcu_logo.png", use_container_width=True)
+    except FileNotFoundError:
+        # A quick backup text header just in case the file name is slightly off
+        st.markdown("<h2 style='text-align: center; color: #00d4ff;'>DCU Business School</h2>", unsafe_allow_html=True)
+        
     st.header("⚙️ Dashboard Controls")
     st.markdown("This dashboard acts as an interactive companion to the FBA1010 Quantitative Risk Management Report.")
     st.markdown("---")
@@ -395,6 +401,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

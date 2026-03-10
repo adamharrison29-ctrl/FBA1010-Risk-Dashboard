@@ -110,7 +110,7 @@ with tab2:
     pc2.metric("Portfolio 1% VaR", f"{p_var*100:.2f}%")
     pc3.metric("Portfolio 1% ES", f"{p_es*100:.2f}%", "Subadditive Property Satisfied")
 
-st.markdown("### Visualizing the Subadditive Property")
+    st.markdown("### Visualizing the Subadditive Property")
     
     fig_bar = go.Figure()
     assets = ['LMT', 'CL=F', 'TLT', 'Equal-Weighted Portfolio']
@@ -275,6 +275,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

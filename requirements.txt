@@ -1,4 +1,4 @@
-streamlit==1.32.0
+streamlit
 pandas
 numpy
 scipy
@@ -6,3 +6,4 @@ yfinance
 plotly
 statsmodels
 openpyxl
+pillow>=10.2.0

@@ -197,6 +197,20 @@ with tab1:
     **Bridging the Gap: Modified VaR**
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion. This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
     """)
+    st.markdown("### Historical VaR Breaches (Backtesting)")
+    st.markdown("A robust risk management framework requires backtesting. This chart highlights the specific trading days where the daily return breached the historical 1% Value-at-Risk threshold, visually isolating the extreme tail events.")
+    
+    var_threshold = np.percentile(data, 1)
+    breaches = data[data < var_threshold]
+    
+    fig_var = go.Figure()
+    fig_var.add_trace(go.Scatter(x=data.index, y=data, mode='lines', name='Daily Returns', line=dict(color='#8b9bb4', width=1)))
+    fig_var.add_hline(y=var_threshold, line_dash="dash", line_color="#ff8c00", annotation_text=f"1% VaR ({var_threshold*100:.2f}%)", annotation_position="bottom right", annotation_font_color="#ff8c00")
+    fig_var.add_trace(go.Scatter(x=breaches.index, y=breaches, mode='markers', name='VaR Breach', marker=dict(color='#ff4b4b', size=8, symbol='x')))
+    
+    fig_var.update_layout(title=f"{asset_choice} Return Timeline & Tail Risk Breaches", template="plotly_dark", hovermode="x unified", yaxis_title="Daily Return")
+    st.plotly_chart(fig_var, use_container_width=True)
+    
     st.markdown("---")
 
     st.markdown("### Cross-Asset Volatility & Tail Risk (Box Plot)")
@@ -401,6 +415,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

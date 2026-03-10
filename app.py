@@ -10,9 +10,34 @@ import statsmodels.api as sm
 st.set_page_config(page_title="Executive Risk Dashboard", page_icon="📈", layout="wide")
 st.markdown("""<style>.main {background-color: #0E1117;} h1, h2, h3 {color: #00d4ff;} .stMetric {background-color: #1E2130; padding: 15px; border-radius: 10px; border-left: 5px solid #00d4ff;}</style>""", unsafe_allow_html=True)
 
-st.title("📈 FBA1010: Executive Risk Management Dashboard")
-st.markdown("### Asset Profiling, Portfolio Diversification, and Jet Fuel Cross-Hedging")
-st.markdown("---")
+st.markdown("""
+    <div style="
+        background: linear-gradient(135deg, #002060 0%, #00d4ff 100%);
+        padding: 40px; 
+        border-radius: 15px; 
+        text-align: center; 
+        margin-bottom: 30px;
+        box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);">
+        <h1 style="
+            color: white; 
+            margin: 0; 
+            font-size: 3.2em; 
+            font-weight: 800; 
+            letter-spacing: 1px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.6);">
+            📊 FBA1010: Quantitative Risk Terminal
+        </h1>
+        <p style="
+            color: #f0f2f6; 
+            font-size: 1.3em; 
+            margin-top: 15px; 
+            margin-bottom: 0;
+            font-weight: 400;
+            letter-spacing: 0.5px;">
+            Asset Profiling &nbsp; | &nbsp; Portfolio Diversification &nbsp; | &nbsp; Jet Fuel Cross-Hedging
+        </p>
+    </div>
+    """, unsafe_allow_html=True)
 
 # 2. DATA ENGINE
 @st.cache_data
@@ -275,6 +300,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

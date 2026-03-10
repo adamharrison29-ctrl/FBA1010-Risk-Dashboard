@@ -100,7 +100,7 @@ with st.sidebar:
     except FileNotFoundError:
         st.markdown("<h2 style='text-align: center; color: #00d4ff;'>DCU Business School</h2>", unsafe_allow_html=True)
         
-    st.header("⚙️ Dashboard Controls")
+    st.header("📊 Project Details")
     st.markdown("This dashboard acts as an interactive companion to the FBA1010 Quantitative Risk Management Report.")
     st.markdown("---")
     st.markdown("**Module:** FBA1010")
@@ -442,6 +442,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

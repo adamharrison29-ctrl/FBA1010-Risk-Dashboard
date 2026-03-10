@@ -96,7 +96,7 @@ prices, returns_full = load_market_data()
 # ==========================================
 with st.sidebar:
     try:
-        st.image("dcu_logo.png", use_container_width=True)
+        st.image("dcu_logo.jpg", use_container_width=True)
     except FileNotFoundError:
         st.markdown("<h2 style='text-align: center; color: #00d4ff;'>DCU Business School</h2>", unsafe_allow_html=True)
         
@@ -424,6 +424,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

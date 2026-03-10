@@ -33,15 +33,15 @@ tab1, tab2, tab3 = st.tabs(["📊 Q1: Individual Asset Risk", "💼 Q2: Portfoli
 with tab1:
     st.markdown("""
     ### Methodology
-    Daily price data for three assets, Lockheed Martin (LMT) representing equity, Continuous Front-Month WTI Crude Oil (CL=F) representing unexpired crude oil futures, and the iShares 20+ Year Treasury Bond ETF (TLT), were sourced via Yahoo Finance from March 2024 to March 2026. [cite: 2] CL=F was selected as it provides a continuous, liquid proxy for near-term oil exposure, solving the issue of individual unexpired contracts lacking two full years of historical data. [cite: 3] Daily logarithmic returns were calculated to evaluate the risk profile of each asset. [cite: 4]
+    Daily price data for three assets, Lockheed Martin (LMT) representing equity, Continuous Front-Month WTI Crude Oil (CL=F) representing unexpired crude oil futures, and the iShares 20+ Year Treasury Bond ETF (TLT), were sourced via Yahoo Finance from March 2024 to March 2026. CL=F was selected as it provides a continuous, liquid proxy for near-term oil exposure, solving the issue of individual unexpired contracts lacking two full years of historical data. Daily logarithmic returns were calculated to evaluate the risk profile of each asset.
     
     ### Q1A: Normality of Returns
-    A Shapiro-Wilk test was conducted to determine if the full 2-year sample returns follow a normal distribution. [cite: 6] All p-values are significantly below 0.05; thus, we reject the null hypothesis. The returns are not normally distributed. [cite: 9] 
+    A Shapiro-Wilk test was conducted to determine if the full 2-year sample returns follow a normal distribution. All p-values are significantly below 0.05; thus, we reject the null hypothesis. The returns are not normally distributed. 
     
-    Standard normal distributions assume extreme events are exceptionally rare. In reality, these assets exhibit "fat tails" (excess kurtosis) due to real-world fundamental drivers: [cite: 10]
-    * **LMT (Excess Kurtosis: 9.66):** Highly sensitive to extreme, binary events like government contract awards or sudden geopolitical conflicts. [cite: 11]
-    * **CL=F (Excess Kurtosis: 1.88):** Vulnerable to immediate macroeconomic supply shocks, such as unexpected OPEC+ cuts. [cite: 12]
-    * **TLT (Excess Kurtosis: 0.90):** Reacts sharply to surprise central bank interest rate decisions. [cite: 13]
+    Standard normal distributions assume extreme events are exceptionally rare. In reality, these assets exhibit "fat tails" (excess kurtosis) due to real-world fundamental drivers:
+    * **LMT (Excess Kurtosis: 9.66):** Highly sensitive to extreme, binary events like government contract awards or sudden geopolitical conflicts.
+    * **CL=F (Excess Kurtosis: 1.88):** Vulnerable to immediate macroeconomic supply shocks, such as unexpected OPEC+ cuts.
+    * **TLT (Excess Kurtosis: 0.90):** Reacts sharply to surprise central bank interest rate decisions.
     """)
     
     asset_choice = st.selectbox("Select Asset to View Interactive Distribution:", ['LMT', 'CL=F', 'TLT'])
@@ -66,10 +66,10 @@ with tab1:
 
     st.markdown("""
     ### Q1B & Q1C: Historical Risk Metrics (Year 1 vs. Full 2 Years)
-    In Year 1, TLT was the least volatile, while CL=F was the most volatile. [cite: 18] LMT exhibited the most severe tail risk (ES: -6.35%). [cite: 19] Comparing the full two years to Year 1, volatility noticeably increased for LMT and CL=F. Furthermore, tail risk worsened significantly; [cite: 20] LMT’s 1% VaR dropped from -3.55% to -4.82%, indicating the second year introduced more extreme negative downside events, reinforcing the presence of fat tails. [cite: 21]
+    In Year 1, TLT was the least volatile, while CL=F was the most volatile. LMT exhibited the most severe tail risk (ES: -6.35%). Comparing the full two years to Year 1, volatility noticeably increased for LMT and CL=F. Furthermore, tail risk worsened significantly; LMT’s 1% VaR dropped from -3.55% to -4.82%, indicating the second year introduced more extreme negative downside events, reinforcing the presence of fat tails.
     
     ### Q1D: Parametric Risk Metrics
-    Compared to the historical metrics in Q1C, the parametric method drastically underestimates tail risk. [cite: 25] For example, LMT's Parametric ES (-3.91%) is far weaker than its Historical ES (-6.95%). [cite: 26] Because parametric models force a symmetrical "bell curve," they ignore the heavy left tails identified in Q1A, creating a [cite: 27] dangerously optimistic risk assessment. [cite: 28]
+    Compared to the historical metrics in Q1C, the parametric method drastically underestimates tail risk. For example, LMT's Parametric ES (-3.91%) is far weaker than its Historical ES (-6.95%). Because parametric models force a symmetrical "bell curve," they ignore the heavy left tails identified in Q1A, creating a dangerously optimistic risk assessment.
     
     **Bridging the Gap: Modified VaR**
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion. This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
@@ -81,7 +81,7 @@ with tab1:
 with tab2:
     st.markdown("""
     ### Q2: Risk Profile of Portfolio of Assets
-    An equal-weighted portfolio was constructed using the three assets (LMT, CL=F, TLT), allocating 33.33% to each. [cite: 31] Using the full 2 years of daily returns, historical simulation was applied to determine the portfolio's risk metrics. [cite: 32]
+    An equal-weighted portfolio was constructed using the three assets (LMT, CL=F, TLT), allocating 33.33% to each. Using the full 2 years of daily returns, historical simulation was applied to determine the portfolio's risk metrics.
     """)
     
     weights = np.array([1/3, 1/3, 1/3])
@@ -96,7 +96,7 @@ with tab2:
 
     st.markdown("""
     **Summary & Comparison to Individual Assets**
-    A clear diversification benefit is observed. [cite: 34] The portfolio's overall volatility (0.87%) and tail risk (ES: -3.05%) are drastically lower than those of its riskiest components, LMT (ES: -6.95%) and CL=F (ES: -6.58%). [cite: 35] Because these distinct asset classes (equities, commodities, bonds) are not perfectly correlated, extreme downside movements in one asset are often offset by stability or inverse movements in another, smoothing the overall return distribution and dramatically reducing catastrophic tail risk. [cite: 36]
+    A clear diversification benefit is observed. The portfolio's overall volatility (0.87%) and tail risk (ES: -3.05%) are drastically lower than those of its riskiest components, LMT (ES: -6.95%) and CL=F (ES: -6.58%). Because these distinct asset classes (equities, commodities, bonds) are not perfectly correlated, extreme downside movements in one asset are often offset by stability or inverse movements in another, smoothing the overall return distribution and dramatically reducing catastrophic tail risk.
     
     ### Advanced Correlation Analysis
     """)
@@ -122,7 +122,7 @@ with tab2:
 
     st.markdown("""
     **The Subadditive Property**
-    Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. [cite: 37] The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. [cite: 38] ES is a mathematically coherent risk measure that always satisfies this rule. [cite: 39] Conversely, when asset returns exhibit non-normal distributions with "fat tails"—which was definitively proven in Q1—VaR can fail subadditivity. [cite: 40] This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts. [cite: 41]
+    Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. ES is a mathematically coherent risk measure that always satisfies this rule. Conversely, when asset returns exhibit non-normal distributions with "fat tails"—which was definitively proven in Q1—VaR can fail subadditivity. This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts.
     """)
 
 # ==========================================
@@ -131,9 +131,9 @@ with tab2:
 with tab3:
     st.markdown("""
     ### Q3: Futures Markets & Hedging
-    The assignment requires the use of daily price data spanning two full calendar years. [cite: 43] Working backward from the March 2026 deadline, a two-year sample from March 2024 to March 2026 was constructed. [cite: 44] Daily U.S. Gulf Coast spot jet fuel prices were sourced from the EIA. [cite: 45] Because government spot reporting naturally lags behind live financial markets, the continuous crude oil futures data (CL=F) was strategically truncated to March 2, 2026, perfectly aligning the two time series to prevent data-matching errors. [cite: 46]
+    The assignment requires the use of daily price data spanning two full calendar years. Working backward from the March 2026 deadline, a two-year sample from March 2024 to March 2026 was constructed. Daily U.S. Gulf Coast spot jet fuel prices were sourced from the EIA. Because government spot reporting naturally lags behind live financial markets, the continuous crude oil futures data (CL=F) was strategically truncated to March 2, 2026, perfectly aligning the two time series to prevent data-matching errors.
     
-    Following the assignment guidelines, the sample was split: the first 1.5 years of data were used to estimate the optimal hedge ratio ($h^*$), and the remaining data was used to test the hedge, simulating physical fuel consumption at the exact end of the 2-year sample. [cite: 47] The $h^*$ was calculated via an Ordinary Least Squares (OLS) regression of the daily price changes of jet fuel against crude oil futures. [cite: 48]
+    Following the assignment guidelines, the sample was split: the first 1.5 years of data were used to estimate the optimal hedge ratio ($h^*$), and the remaining data was used to test the hedge, simulating physical fuel consumption at the exact end of the 2-year sample. The $h^*$ was calculated via an Ordinary Least Squares (OLS) regression of the daily price changes of jet fuel against crude oil futures.
     """)
     
     try:
@@ -169,13 +169,13 @@ with tab3:
 
         st.markdown(f"""
         **Hedge Ratio & Contract Calculation**
-        The regression yielded an $h^*$ of 0.0248 ($R^2$ = 0.5887). [cite: 50] Because the spot data is priced per gallon and the futures data is priced per barrel, this $h^*$ implicitly captures the unit variance (closely mirroring the theoretical 1:42 gallon-to-barrel ratio). [cite: 51]
+        The regression yielded an $h^*$ of 0.0248 ($R^2$ = 0.5887). Because the spot data is priced per gallon and the futures data is priced per barrel, this $h^*$ implicitly captures the unit variance (closely mirroring the theoretical 1:42 gallon-to-barrel ratio).
         
-        To determine the number of 1,000-barrel contracts ($N$) required to hedge the 1,000,000-gallon exposure: [cite: 52]
+        To determine the number of 1,000-barrel contracts ($N$) required to hedge the 1,000,000-gallon exposure:
         
         $$N = \\frac{{1,000,000 \\times 0.0248}}{{1,000}} = 24.79$$
         
-        Rounding to the nearest whole unit, the airline must take a long position of 25 crude oil contracts. [cite: 55]
+        Rounding to the nearest whole unit, the airline must take a long position of 25 crude oil contracts.
         """)
 
         hc1, hc2, hc3, hc4 = st.columns(4)
@@ -193,10 +193,10 @@ with tab3:
         
         st.markdown("""
         **Real-World Hedge Effectiveness**
-        To test the hedge, we simulated initiating the 25-contract long position at the end of the estimation period (Sept 5, 2025) and lifting it upon physical fuel consumption at the end of the dataset (March 2, 2026). [cite: 58]
+        To test the hedge, we simulated initiating the 25-contract long position at the end of the estimation period (Sept 5, 2025) and lifting it upon physical fuel consumption at the end of the dataset (March 2, 2026).
         
         **Conclusion:**
-        The cross-hedge was highly effective. Rising energy prices across the test period would have severely impacted the airline's operating costs. [cite: 61] However, the $234,000 profit generated by the long futures position successfully offset the rising spot market prices, reducing the effective cost of jet fuel from $2.74 to $2.50 per gallon. [cite: 62] This validates the $R^2$ of 58.87%, proving that while CL=F is not a perfect 1:1 proxy, it serves as an excellent mitigating instrument for jet fuel price risk. [cite: 63]
+        The cross-hedge was highly effective. Rising energy prices across the test period would have severely impacted the airline's operating costs. However, the $234,000 profit generated by the long futures position successfully offset the rising spot market prices, reducing the effective cost of jet fuel from $2.74 to $2.50 per gallon. This validates the $R^2$ of 58.87%, proving that while CL=F is not a perfect 1:1 proxy, it serves as an excellent mitigating instrument for jet fuel price risk.
         
         **Limitations and Basis Risk**
         """)
@@ -214,3 +214,4 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+

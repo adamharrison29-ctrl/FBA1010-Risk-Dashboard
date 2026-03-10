@@ -110,6 +110,20 @@ with tab2:
     pc2.metric("Portfolio 1% VaR", f"{p_var*100:.2f}%")
     pc3.metric("Portfolio 1% ES", f"{p_es*100:.2f}%", "Subadditive Property Satisfied")
 
+st.markdown("### Visualizing the Subadditive Property")
+    
+    fig_bar = go.Figure()
+    assets = ['LMT', 'CL=F', 'TLT', 'Equal-Weighted Portfolio']
+    var_vals = [np.percentile(returns_full['LMT'], 1)*100, np.percentile(returns_full['CL=F'], 1)*100, np.percentile(returns_full['TLT'], 1)*100, p_var*100]
+    es_vals = [returns_full['LMT'][returns_full['LMT'] <= np.percentile(returns_full['LMT'], 1)].mean()*100,
+               returns_full['CL=F'][returns_full['CL=F'] <= np.percentile(returns_full['CL=F'], 1)].mean()*100,
+               returns_full['TLT'][returns_full['TLT'] <= np.percentile(returns_full['TLT'], 1)].mean()*100, p_es*100]
+    
+    fig_bar.add_trace(go.Bar(x=assets, y=var_vals, name='1% VaR', marker_color='#ffb822'))
+    fig_bar.add_trace(go.Bar(x=assets, y=es_vals, name='1% ES', marker_color='#ff4b4b'))
+    
+    fig_bar.update_layout(title="Tail Risk Comparison: Individual Assets vs Portfolio", template="plotly_dark", yaxis_title="Risk / Return (%)", barmode='group')
+    st.plotly_chart(fig_bar, use_container_width=True)
     st.markdown("""
     **Summary & Comparison to Individual Assets**
     A clear diversification benefit is observed. The portfolio's overall volatility (0.87%) and tail risk (ES: -3.05%) are drastically lower than those of its riskiest components, LMT (ES: -6.95%) and CL=F (ES: -6.58%). Because these distinct asset classes (equities, commodities, bonds) are not perfectly correlated, extreme downside movements in one asset are often offset by stability or inverse movements in another, smoothing the overall return distribution and dramatically reducing catastrophic tail risk.
@@ -261,6 +275,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

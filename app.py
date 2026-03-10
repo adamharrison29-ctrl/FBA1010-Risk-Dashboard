@@ -74,7 +74,7 @@ with tab1:
     **Bridging the Gap: Modified VaR**
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion. This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
     """)
-    ---
+    
     st.markdown("### Cross-Asset Volatility & Tail Risk (Box Plot)")
     st.markdown("This box plot visually confirms the excess kurtosis calculated above. The 'whiskers' represent the standard range of volatility, while the individual dots highlight the extreme tail-risk events (fat tails) that normal distributions fail to predict.")
     
@@ -85,7 +85,7 @@ with tab1:
     
     fig_box.update_layout(title="Daily Return Distribution & Outliers", template="plotly_dark", yaxis_title="Daily Return")
     st.plotly_chart(fig_box, use_container_width=True)
-    ---
+    
     st.markdown("""
     ### Raw Data: Daily Asset Returns
     """)
@@ -261,6 +261,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

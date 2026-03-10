@@ -6,10 +6,80 @@ import yfinance as yf
 import plotly.graph_objects as go
 import statsmodels.api as sm
 
-# 1. PAGE CONFIGURATION
+# ==========================================
+# 1. PAGE CONFIGURATION & UI ENGINE
+# ==========================================
 st.set_page_config(page_title="Executive Risk Dashboard", page_icon="📈", layout="wide")
-st.markdown("""<style>.main {background-color: #0E1117;} h1, h2, h3 {color: #00d4ff;} .stMetric {background-color: #1E2130; padding: 15px; border-radius: 10px; border-left: 5px solid #00d4ff;}</style>""", unsafe_allow_html=True)
 
+st.markdown("""
+    <style>
+    /* 1. Terminal Grid Background */
+    .stApp {
+        background-color: #0E1117;
+        background-image: 
+            linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        background-size: 30px 30px;
+    }
+    
+    /* 2. Premium Typography */
+    p, li {
+        color: #cfd8dc !important; 
+        font-size: 1.05rem;
+        line-height: 1.8 !important;
+        letter-spacing: 0.2px;
+    }
+    h1, h2, h3 {
+        color: #00d4ff !important;
+        font-weight: 600 !important;
+        letter-spacing: 0.5px;
+    }
+    
+    /* 3. Elevated Metric Cards */
+    [data-testid="metric-container"] {
+        background-color: #161a24;
+        border: 1px solid #2d3342;
+        padding: 15px 20px;
+        border-radius: 12px;
+        border-left: 5px solid #00d4ff;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        transition: transform 0.2s ease;
+    }
+    [data-testid="metric-container"]:hover {
+        transform: translateY(-3px);
+    }
+    
+    /* 4. Styled Pill Tabs */
+    .stTabs [data-baseweb="tab-list"] {
+        background-color: #11141c;
+        border-radius: 12px;
+        padding: 5px;
+        box-shadow: inset 0 2px 4px rgba(0,0,0,0.5);
+    }
+    .stTabs [data-baseweb="tab"] {
+        color: #8b9bb4;
+        border-radius: 8px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        transition: all 0.3s ease;
+    }
+    .stTabs [aria-selected="true"] {
+        background: linear-gradient(135deg, #002060 0%, #063970 100%) !important;
+        color: #00d4ff !important;
+        border: 1px solid #00d4ff !important;
+        box-shadow: 0 0 10px rgba(0, 212, 255, 0.2);
+    }
+    
+    /* 5. Clean DataFrames */
+    [data-testid="stDataFrame"] {
+        border-radius: 10px;
+        overflow: hidden;
+        border: 1px solid #2d3342;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+
+# Custom HTML/CSS Hero Banner
 st.markdown("""
     <div style="
         background: linear-gradient(135deg, #002060 0%, #00d4ff 100%);
@@ -19,7 +89,7 @@ st.markdown("""
         margin-bottom: 30px;
         box-shadow: 0 4px 15px rgba(0, 212, 255, 0.2);">
         <h1 style="
-            color: white; 
+            color: white !important; 
             margin: 0; 
             font-size: 3.2em; 
             font-weight: 800; 
@@ -28,7 +98,7 @@ st.markdown("""
             📊 FBA1010: Quantitative Risk Terminal
         </h1>
         <p style="
-            color: #f0f2f6; 
+            color: #f0f2f6 !important; 
             font-size: 1.3em; 
             margin-top: 15px; 
             margin-bottom: 0;
@@ -300,6 +370,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

@@ -408,7 +408,7 @@ with tab3:
         st.plotly_chart(fig_basis, use_container_width=True)
 
         st.markdown("""
-        While the cross-hedge generated substantial savings, it is subject to basis risk—the risk that the price relationship between jet fuel and crude oil fluctuates over time. Jet fuel prices are influenced by specific refining constraints and aviation demand, which do not always perfectly track unrefined crude oil. As visualized above, this basis spread is volatile. Therefore, while $h^*$ provides an optimal static ratio, a dynamic hedging strategy would be required in practice to manage ongoing basis risk.
+        While the cross-hedge generated substantial savings, it is subject to basis risk, the risk that the price relationship between jet fuel and crude oil fluctuates over time. Jet fuel prices are influenced by specific refining constraints and aviation demand, which do not always perfectly track unrefined crude oil. As visualized above, this basis spread is volatile. Therefore, while $h^*$ provides an optimal static ratio, a dynamic hedging strategy would be required in practice to manage ongoing basis risk.
         """)
         
         st.markdown("---")
@@ -426,6 +426,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

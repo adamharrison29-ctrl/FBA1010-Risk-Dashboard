@@ -203,6 +203,7 @@ with tab1:
     Compared to the historical metrics in Q1C, the parametric method drastically underestimates tail risk. For example, LMT's Parametric ES (-3.91%) is far weaker than its Historical ES (-6.95%). Because parametric models force a symmetrical bell curve, they ignore the heavy left tails identified in Q1A, creating a dangerously optimistic risk assessment (Jorion, 2006).
     
     **Using Modified VaR**
+    
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion (Favre & Galeano, 2002). This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
     """)
    # --- NEW: Parametric & Modified VaR Calculation & Table ---
@@ -490,6 +491,7 @@ with tab4:
     9. **USEIA. (2026, June 3).** U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB (Dollars per Gallon). USEIA. Petroleum & Other Liquids. https://www.eia.gov/dnav/pet/hist/eer_epjk_pf4_rgc_dpgD.htm
     10. **USEIA. (n.d.).** Glossary—U.S. Energy Information Administration (EIA). USEIA. Glossary - Barrel. https://www.eia.gov/tools/glossary/index.php
     """)
+
 
 
 

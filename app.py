@@ -6,9 +6,7 @@ import yfinance as yf
 import plotly.graph_objects as go
 import statsmodels.api as sm
 
-# ==========================================
-# 1. PAGE CONFIGURATION & UI ENGINE
-# ==========================================
+# Page config
 st.set_page_config(page_title="Executive Risk Dashboard", page_icon="📈", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -79,9 +77,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. DATA ENGINE (Moved up so the sidebar can see it!)
-# ==========================================
+# data
 @st.cache_data
 def load_market_data():
     tickers = ['LMT', 'CL=F', 'TLT']
@@ -91,9 +87,7 @@ def load_market_data():
 
 prices, returns_full = load_market_data()
 
-# ==========================================
-# 3. THE SIDEBAR (Framing the page)
-# ==========================================
+# sidebar
 with st.sidebar:
     try:
         st.image("dcu_logo.jpg", use_container_width=True)
@@ -106,7 +100,7 @@ with st.sidebar:
     st.markdown("**Module:** FBA1010")
     st.markdown("**Date:** March 2026")
     
-    # The Download Button
+    # download button
     st.markdown("---")
     st.markdown("**Data Export:**")
     csv_export = returns_full.to_csv().encode('utf-8')
@@ -117,9 +111,7 @@ with st.sidebar:
         mime='text/csv',
     )
 
-# ==========================================
-# 4. HERO BANNER
-# ==========================================
+# banner at top of page
 st.markdown("""
     <div style="
         background: linear-gradient(135deg, #002060 0%, #00d4ff 100%);
@@ -149,14 +141,10 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ==========================================
-# 5. TABS
-# ==========================================
+# 3 tabs for each question
 tab1, tab2, tab3 = st.tabs(["📊 Q1: Individual Asset Risk", "💼 Q2: Portfolio Diversification", "🛢️ Q3: Jet Fuel Hedging"])
 
-# ------------------------------------------
-# --- TAB 1: Q1 ---
-# ------------------------------------------
+# tab 1
 with tab1:
     st.markdown("""
     ### Methodology
@@ -237,9 +225,7 @@ with tab1:
     st.markdown("### Raw Data: Daily Asset Returns")
     st.dataframe(returns_full.style.format("{:.4%}"), use_container_width=True, height=300)
 
-# ------------------------------------------
-# --- TAB 2: Q2 ---
-# ------------------------------------------
+# tab 2 q2
 with tab2:
     st.markdown("""
     ### Q2: Risk Profile of Portfolio of Assets
@@ -298,11 +284,10 @@ with tab2:
     
     corr_matrix = returns_full[['LMT', 'CL=F', 'TLT']].corr()
     
-    # Custom dark-theme color scale (replaces the white/pink)
     custom_colorscale = [
-        [0.0, '#002060'],   # Deep blue for negative correlation
-        [0.5, '#2d3342'],   # Dark slate for near-zero correlation
-        [1.0, '#00d4ff']    # Electric cyan for positive correlation
+        [0.0, '#002060'],   
+        [0.5, '#2d3342'],   
+        [1.0, '#00d4ff']    
     ]
 
     fig_corr = go.Figure(data=go.Heatmap(
@@ -313,7 +298,7 @@ with tab2:
                    text=np.round(corr_matrix.values, 2),
                    texttemplate="%{text}", textfont={"size":18, "color":"white"},
                    showscale=True,
-                   xgap=3, ygap=3)) # This adds the clean borders between cells
+                   xgap=3, ygap=3)) 
                    
     fig_corr.update_layout(
         title="Asset Correlation Matrix", 
@@ -339,9 +324,8 @@ with tab2:
     Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. ES is a mathematically coherent risk measure that always satisfies this rule. Conversely, when asset returns exhibit non-normal distributions with "fat tails"—which was definitively proven in Q1—VaR can fail subadditivity. This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts.
     """)
 
-# ------------------------------------------
-# --- TAB 3: Q3 ---
-# ------------------------------------------
+# tab 3
+
 with tab3:
     st.markdown("""
     ### Q3: Futures Markets & Hedging
@@ -442,6 +426,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

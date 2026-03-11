@@ -448,19 +448,17 @@ with tab4:
     st.markdown("""
     ### 📚 References & Literature
     
-    * **Artzner, P., Delbaen, F., Eber, J. M. and Heath, D. (1999).** 'Coherent measures of risk'. *Mathematical Finance*, 9(3), pp. 203-228.
-    * **Basel Committee on Banking Supervision (1996).** *Supervisory framework for the use of "backtesting" in conjunction with the internal models approach to market risk capital requirements*. Basel: Bank for International Settlements.
-    * **Favre, L. and Galeano, J. A. (2002).** 'Mean-Modified Value-at-Risk Optimization with Hedge Funds'. *The Journal of Alternative Investments*, 5(2), pp. 21-25.
-    * **Hull, J. C. (2022).** *Options, Futures, and Other Derivatives*. 11th ed. Harlow: Pearson Education.
-    * **Jorion, P. (2006).** *Value at Risk: The New Benchmark for Managing Financial Risk*. 3rd ed. New York: McGraw-Hill.
-    * **Kupiec, P. H. (1995).** 'Techniques for verifying the accuracy of risk measurement models'. *The Journal of Derivatives*, 3(2), pp. 73-84.
-    * **Mandelbrot, B. (1963).** 'The variation of certain speculative prices'. *The Journal of Business*, 36(4), pp. 394-419.
-    * **Morrell, P. and Swan, W. (2006).** 'Airline jet fuel hedging: Theory and practice'. *Transport Reviews*, 26(6), pp. 713-730.
-    * **Shapiro, S. S. and Wilk, M. B. (1965).** 'An analysis of variance test for normality (complete samples)'. *Biometrika*, 52(3/4), pp. 591-611.
-    * **U.S. Energy Information Administration (EIA). (n.d.).** *Glossary: Barrel*. Washington, DC: U.S. Department of Energy. Available at: https://www.eia.gov/tools/glossary/
+    1. **Artzner, P., Delbaen, F., Eber, J.-M., & Heath, D. (1999).** Coherent Measures of Risk. *Mathematical Finance*, 9(3), 203–228. https://doi.org/10.1111/1467-9965.00068
+    2. **Favre, L., & Galeano, J.-A. (2002).** Mean-modified value-at-risk optimization with hedge funds. *Journal of Alternative Investments*, 5(2), 21–25.
+    3. **Hull, J. (2018).** Options, Futures, and Other Derivatives, Global Edition. Pearson.
+    4. **Jorion, P. (2006).** Value at Risk, 3rd Ed.: The New Benchmark for Managing Financial Risk. McGraw Hill Professional.
+    5. **Kupiec, P. (1995).** Techniques for verifying the accuracy of risk measurement models (Working Paper Nos. 95–24; Finance and Economics Discussion Series). Board of Governors of the Federal Reserve System (U.S.). https://EconPapers.repec.org/RePEc:fip:fedgfe:95-24
+    6. **Mandelbrot, B. (1963).** The Variation of Certain Speculative Prices. *The Journal of Business*, 36. https://doi.org/10.1086/294632
+    7. **Morrell, P., & Swan, W. (2006).** Airline Jet Fuel Hedging: Theory and Practice. *Transport Reviews*, 26(6), 713–730. https://doi.org/10.1080/01441640600679524
+    8. **Shapiro, S. S., & Wilk, M. B. (1965).** An Analysis of Variance Test for Normality (Complete Samples). *Biometrika*, 52(3/4), 591–611. https://doi.org/10.2307/2333709
+    9. **USEIA. (2026, June 3).** U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB (Dollars per Gallon). USEIA. Petroleum & Other Liquids. https://www.eia.gov/dnav/pet/hist/eer_epjk_pf4_rgc_dpgD.htm
+    10. **USEIA. (n.d.).** Glossary—U.S. Energy Information Administration (EIA). USEIA. Glossary - Barrel. https://www.eia.gov/tools/glossary/index.php
     """)
-
-
 
 
 

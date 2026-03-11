@@ -205,6 +205,37 @@ with tab1:
     **Using Modified VaR**
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion (Favre & Galeano, 2002). This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
     """)
+   # --- NEW: Parametric & Modified VaR Calculation & Table ---
+    mu = data.mean()
+    sigma = data.std()
+    z = stats.norm.ppf(0.01) # 1% Z-score
+    
+    # 1. Historical
+    hist_var = np.percentile(data, 1)
+    hist_es = data[data <= hist_var].mean()
+    
+    # 2. Parametric
+    param_var = mu + z * sigma
+    param_es = mu - sigma * (stats.norm.pdf(z) / 0.01)
+    
+    # 3. Modified (Cornish-Fisher)
+    S = data.skew()
+    K = data.kurtosis() # Excess kurtosis
+    z_cf = z + (1/6)*(z**2 - 1)*S + (1/24)*(z**3 - 3*z)*K - (1/36)*(2*z**3 - 5*z)*(S**2)
+    mod_var = mu + z_cf * sigma
+    
+    # Create the comparison DataFrame
+    risk_comp_df = pd.DataFrame({
+        "Risk Metric (1%)": ["Value-at-Risk (VaR)", "Expected Shortfall (ES)"],
+        "Historical Simulation": [f"{hist_var*100:.2f}%", f"{hist_es*100:.2f}%"],
+        "Standard Parametric": [f"{param_var*100:.2f}%", f"{param_es*100:.2f}%"],
+        "Modified (Cornish-Fisher)": [f"{mod_var*100:.2f}%", "N/A*"]
+    }).set_index("Risk Metric (1%)")
+    
+    st.markdown(f"**{asset_choice}: 1% Tail Risk Model Comparison**")
+    st.dataframe(risk_comp_df, use_container_width=True)
+    st.caption("*Note: Cornish-Fisher expansion is primarily used to adjust VaR boundaries. ES integration requires more complex generalized error distributions beyond the scope of this standard metric comparison.")
+    # ---------------------------------------------------------
     st.markdown("---")
 
     st.markdown("### Historical VaR breaches (Backtesting)")
@@ -459,6 +490,7 @@ with tab4:
     9. **USEIA. (2026, June 3).** U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB (Dollars per Gallon). USEIA. Petroleum & Other Liquids. https://www.eia.gov/dnav/pet/hist/eer_epjk_pf4_rgc_dpgD.htm
     10. **USEIA. (n.d.).** Glossary—U.S. Energy Information Administration (EIA). USEIA. Glossary - Barrel. https://www.eia.gov/tools/glossary/index.php
     """)
+
 
 
 

@@ -321,7 +321,7 @@ with tab2:
     st.markdown("---")
     st.markdown("""
     **The Subadditive Property**
-    Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. ES is a mathematically coherent risk measure that always satisfies this rule. Conversely, when asset returns exhibit non-normal distributions with "fat tails"—which was definitively proven in Q1—VaR can fail subadditivity. This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts.
+    Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not. The subadditive property dictates that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. ES is a mathematically coherent risk measure that always satisfies this rule. Conversely, when asset returns exhibit non-normal distributions with "fat tails"(which was definitively proven in Q1) VaR can fail subadditivity. This means VaR could theoretically and incorrectly suggest that a diversified portfolio is riskier than its individual parts.
     """)
 
 # tab 3
@@ -426,6 +426,7 @@ with tab3:
 
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
+
 
 
 

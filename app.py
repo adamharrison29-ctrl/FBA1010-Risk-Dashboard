@@ -6,9 +6,7 @@ import yfinance as yf
 import plotly.graph_objects as go
 import statsmodels.api as sm
 
-# ==========================================
-# 1. PAGE CONFIGURATION & UI ENGINE
-# ==========================================
+# 1. page config
 st.set_page_config(page_title="Executive Risk Dashboard", page_icon="📈", layout="wide", initial_sidebar_state="expanded")
 
 st.markdown("""
@@ -79,9 +77,7 @@ st.markdown("""
     </style>
     """, unsafe_allow_html=True)
 
-# ==========================================
-# 2. DATA ENGINE
-# ==========================================
+# 2. data
 @st.cache_data
 def load_market_data():
     tickers = ['LMT', 'CL=F', 'TLT']
@@ -91,9 +87,8 @@ def load_market_data():
 
 prices, returns_full = load_market_data()
 
-# ==========================================
-# 3. THE SIDEBAR (Framing the page)
-# ==========================================
+# 3. sidebar
+
 with st.sidebar:
     try:
         st.image("dcu_logo.png", use_container_width=True)
@@ -116,9 +111,7 @@ with st.sidebar:
         mime='text/csv',
     )
 
-# ==========================================
-# 4. HERO BANNER
-# ==========================================
+# 4. banner
 st.markdown("""
     <div style="
         background: linear-gradient(135deg, #002060 0%, #00d4ff 100%);
@@ -148,14 +141,10 @@ st.markdown("""
     </div>
     """, unsafe_allow_html=True)
 
-# ==========================================
-# 5. TABS
-# ==========================================
+# 5. tabs
 tab1, tab2, tab3, tab4 = st.tabs(["📊 Q1: Individual Asset Risk", "💼 Q2: Portfolio Diversification", "🛢️ Q3: Jet Fuel Hedging", "📚 Bibliography"])
 
-# ------------------------------------------
-# --- TAB 1: Q1 ---
-# ------------------------------------------
+# tab1
 with tab1:
     st.markdown("""
     ### Methodology
@@ -206,26 +195,25 @@ with tab1:
     
     Because standard parametric models fail to capture excess kurtosis and skewness, institutional risk managers often apply the Cornish-Fisher expansion (Favre & Galeano, 2002). This technique adjusts the standard Z-score to account for non-normal skew and heavy tails. Acknowledging this adjustment highlights why relying purely on standard normal distribution assumptions is an incomplete risk management strategy.
     """)
-   # --- NEW: Parametric & Modified VaR Calculation & Table ---
+   # parametric & modified VaR Cclculation
     mu = data.mean()
     sigma = data.std()
     z = stats.norm.ppf(0.01) # 1% Z-score
     
-    # 1. Historical
+    # 1. historical
     hist_var = np.percentile(data, 1)
     hist_es = data[data <= hist_var].mean()
     
-    # 2. Parametric
+    # 2. parametric
     param_var = mu + z * sigma
     param_es = mu - sigma * (stats.norm.pdf(z) / 0.01)
     
-    # 3. Modified (Cornish-Fisher)
+    # 3. modded
     S = data.skew()
-    K = data.kurtosis() # Excess kurtosis
+    K = data.kurtosis() 
     z_cf = z + (1/6)*(z**2 - 1)*S + (1/24)*(z**3 - 3*z)*K - (1/36)*(2*z**3 - 5*z)*(S**2)
     mod_var = mu + z_cf * sigma
     
-    # Create the comparison DataFrame
     risk_comp_df = pd.DataFrame({
         "Risk Metric (1%)": ["Value-at-Risk (VaR)", "Expected Shortfall (ES)"],
         "Historical Simulation": [f"{hist_var*100:.2f}%", f"{hist_es*100:.2f}%"],
@@ -270,9 +258,7 @@ with tab1:
     st.markdown("### Raw Data: Daily Asset Returns")
     st.dataframe(returns_full.style.format("{:.4%}"), use_container_width=True, height=300)
 
-# ------------------------------------------
-# --- TAB 2: Q2 ---
-# ------------------------------------------
+# tab2
 with tab2:
     st.markdown("""
     ### Q2: Risk Profile of the portfolio of assets
@@ -371,9 +357,7 @@ with tab2:
     Expected Shortfall (ES) satisfies the subadditive property, whereas Value-at-Risk (VaR) generally does not (Artzner et al., 1999). The subadditive property states that the risk of a combined portfolio must be less than or equal to the sum of the standalone risks of its individual components. ES is a mathematically coherent risk measure that always satisfies this rule. Conversely, when asset returns exhibit non-normal distributions with "fat tails", which was definitively proven in Q1, VaR can fail subadditivity. This means VaR could theoretically (and incorrectly) suggest that a diversified portfolio is riskier than its individual parts.
     """)
 
-# ------------------------------------------
-# --- TAB 3: Q3 ---
-# ------------------------------------------
+# tab3
 with tab3:
     st.markdown("""
     ### Q3: Futures Markets & Hedging
@@ -473,9 +457,7 @@ with tab3:
     except Exception as e:
         st.error(f"Data alignment error. Ensure 'US EIA Data.xlsx' is in the repo. Error: {e}")
 
-# ------------------------------------------
-# --- TAB 4: Bibliography ---
-# ------------------------------------------
+# tab4 (bibliography)
 with tab4:
     st.markdown("""
     ### 📚 References & Literature
@@ -491,6 +473,7 @@ with tab4:
     9. **USEIA. (2026, June 3).** U.S. Gulf Coast Kerosene-Type Jet Fuel Spot Price FOB (Dollars per Gallon). USEIA. Petroleum & Other Liquids. https://www.eia.gov/dnav/pet/hist/eer_epjk_pf4_rgc_dpgD.htm
     10. **USEIA. (n.d.).** Glossary—U.S. Energy Information Administration (EIA). USEIA. Glossary - Barrel. https://www.eia.gov/tools/glossary/index.php
     """)
+
 
 
 
